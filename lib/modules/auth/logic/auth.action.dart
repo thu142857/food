@@ -1,3 +1,8 @@
+class SetCurrentScreen {
+  final String currentScreen;
+
+  SetCurrentScreen(this.currentScreen);
+}
 
 class SetLoading {
   final bool isLoading;

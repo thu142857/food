@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 
 class AuthState extends Equatable{
+  final String currentScreen;
   final bool isLoading;
   final String username;
   final String password;
@@ -9,6 +10,7 @@ class AuthState extends Equatable{
   final bool isRightPassword;
 
   AuthState({
+    this.currentScreen,
     this.isLoading,
     this.username,
     this.password,
@@ -19,6 +21,7 @@ class AuthState extends Equatable{
 
   factory AuthState.initial() {
     return AuthState(
+      currentScreen: null,
       isLoading: false,
       password: null,
       username: null,
@@ -28,6 +31,7 @@ class AuthState extends Equatable{
   }
 
   AuthState copyWith({
+    String currentScreen,
     bool isLoading,
     String username,
     String password,
@@ -35,6 +39,7 @@ class AuthState extends Equatable{
     bool isRightPassword,
   }){
     return AuthState(
+      currentScreen: currentScreen ?? this.currentScreen,
       isLoading: isLoading ?? this.isLoading,
       username: username ?? this.username,
       password: password ?? this.password,
@@ -44,6 +49,7 @@ class AuthState extends Equatable{
   }
   @override 
   List<Object> get props => [
+    currentScreen,
     isLoading,
     username,
     password,

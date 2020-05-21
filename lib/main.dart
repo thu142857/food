@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:food/modules/auth/ui/login_signup_ui.dart';
 import 'package:food/dashboard.dart';
 import 'package:food/redux/IStore.dart';
+import 'package:food/routers/routes.dart';
 import 'package:redux/redux.dart';
 import 'redux/reducers.dart';
 import 'package:food/redux/store.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store, 
       child: new MaterialApp(
+        onGenerateRoute: onGenerateRoute,
         title: 'Login/Signup to FOOD',
         // debugShowCheckedModeBanner: false,
         theme: new ThemeData(

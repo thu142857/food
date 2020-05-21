@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:food/dashboard.dart';
 
 import 'package:food/modules/auth/auth.dart';
 import 'package:food/modules/auth/logic/helpers.dart';
@@ -50,17 +51,20 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
         appBar: new AppBar(
           title: new Text('Flutter login demo'),
         ),
-        // body: Stack(
-        //   children: <Widget>[
-        //     showForm(),
-        //     showCircularProgress(),
-        //   ],
-        // )
+
         body: Container(
           child: StoreConnector<AppState,AppState>(
+            distinct: true,
             converter: (store) => store.state,
             builder: (context,state){
+              final username = store.state.auth.username;
+              if (username != null) {
+               // Navigator.pop((context) => Dashboard());
+              }
+
               return showForm();
+              // return showForm();
+              
               // showCircularProgress();
             },
           ),
@@ -88,9 +92,11 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
       try {
         if (_isLoginForm) {
           userId = await signIn(_email, _password);
-          await onSuccessLogin(_email, _password);   
+          await onSuccessLogin(_email, _password);  
+          Navigator.of(context).pushReplacementNamed('dashboard');
           // await store.dispatch(loginWithPassword(_email, _password));     
           print('Signed in: $userId');
+
 
         } else {
           userId = await signUp(_email, _password);
@@ -174,7 +180,7 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
-        obscureText: passwordVisible,
+        obscureText: !passwordVisible,
         // autofocus: false,
         decoration: new InputDecoration(
             hintText: 'Password',

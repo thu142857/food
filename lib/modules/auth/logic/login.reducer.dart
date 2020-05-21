@@ -13,12 +13,20 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 
 final Reducer<AuthState> authReducer = combineReducers([
+  TypedReducer<AuthState, SetCurrentScreen>(setCurrentScreen),
   TypedReducer<AuthState, SetLoading>(setLoading),
   TypedReducer<AuthState, SetEmail>(setEmail),
   TypedReducer<AuthState, SetPassword>(setPassword),
   TypedReducer<AuthState, SetIsRightPassword>(setIsRightPassword),
   TypedReducer<AuthState, SetIsRightUsername>(setIsRightUsername),
 ]);
+
+
+AuthState setCurrentScreen(AuthState state, SetCurrentScreen action) {
+  state = state.copyWith(currentScreen: action.currentScreen);
+
+  return state;
+}
 
 AuthState setLoading(AuthState state, SetLoading action) {
   state = state.copyWith(isLoading: action.isLoading);
@@ -72,6 +80,8 @@ ThunkAction<AppState> loginWithPassword(String email, String password){
       // final String password = store?.state?.auth?.password;
       await store.dispatch(SetEmail(email));
       await store.dispatch(SetPassword(password));
+      await store.dispatch(SetCurrentScreen('dashboard'));
+      print(store.state.auth.username);
     } catch (e) {
     }
   };
