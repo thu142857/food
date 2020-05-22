@@ -323,7 +323,7 @@ class LoginSignupPageState extends State<LoginSignupPage>{
   }
   Widget showForm() {
   return new Container(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(10.0),
       child: new Form(
         key: _formKey,
         child: new ListView(
