@@ -40,4 +40,7 @@ class SetIsRightPassword {
   SetIsRightPassword(this.isRightPassword);
 }
 
-class Logout { }
+class Logout { 
+  // SetEmail(null);
+  // SetPassword(null)
+}

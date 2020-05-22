@@ -61,23 +61,43 @@ AuthState setIsRightPassword(AuthState state, SetIsRightPassword action) {
 ThunkAction<AppState> initialAuthData() {
   return (Store<AppState> store) async {
     try {
-        // PersistentState persistor = PersistentState(
-        //   await SharedPreferences.getInstance()
-        //   );
+        PersistentState persistor = PersistentState(
+           await SharedPreferences.getInstance()
+          );
 
-        // await store.dispatch(SetEmail(persistor.username));
-        // await store.dispatch(SetEmail(persistor.password));
+        await store.dispatch(SetEmail(persistor.email));
+        await store.dispatch(SetPassword(persistor.password));
     } catch (e) {
       print(e);
     }
   };
 }
-
-ThunkAction<AppState> loginWithPassword(String email, String password){
+ThunkAction<AppState> logout() {
+  return (Store<AppState> store) async {
+    try {
+      PersistentState persistor = PersistentState(await SharedPreferences.getInstance());
+      persistor.invalidateAuth();
+      // await store.dispatch(Logout());
+      await store.dispatch(SetEmail(""));
+      await store.dispatch(SetPassword(""));
+      // print( 'da xoa ' + persistor.email);
+    } catch (e) {
+      print(e);
+    }
+  };
+}
+ThunkAction<AppState> loginWithPassword({String email, String password}){
   return (store) async{
     try {
       // final String email = store?.state?.auth?.username;
       // final String password = store?.state?.auth?.password;
+      // final preferrence = await SharedPreferences.getInstance();
+      // preferrence.setString('email', email);
+      // preferrence.setString('password', password);
+      PersistentState persistor = PersistentState(await SharedPreferences.getInstance());
+      persistor.setEmailData(email);
+      persistor.setPasswordData(password);
+      // print(persistor.getString('email'));
       await store.dispatch(SetEmail(email));
       await store.dispatch(SetPassword(password));
       await store.dispatch(SetCurrentScreen('dashboard'));

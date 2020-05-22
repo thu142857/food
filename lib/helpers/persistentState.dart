@@ -2,23 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersistentState {
-  String username;
+  SharedPreferences _preferences;
+  String email;
   String password;
 
-  PersistentState(
-      {@required this.username, this.password});
-
-  PersistentState.fromAppState(PersistentState another) {
-    username = another.username;
-    password = another.password;
+  PersistentState(this._preferences)
+  : email = _preferences.getString('email'),
+    password = _preferences.getString('password'){
+      //
   }
-  String get viewUsername =>username;
-  
-  LoginPersis() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String username = (prefs.getString('username') ?? null);
-  String password = (prefs.getString('password') ?? null);
-  await prefs.setString('username', username);
-  await prefs.setString('password', password);
-}
+
+  setEmailData(String newEmail) {
+    email = newEmail;
+     _preferences.setString('email', newEmail);
+
+  }
+  setPasswordData(String newPassword) {
+    password = newPassword;
+     _preferences.setString('password', newPassword);
+
+  }
+  invalidateAuth(){
+    email = null;
+    password = null;
+    _preferences.remove('email');
+    _preferences.remove('password');
+  }
+
 }

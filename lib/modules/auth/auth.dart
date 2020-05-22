@@ -23,7 +23,7 @@ Future<FirebaseUser> getCurrentUser() async {
   return user;
 }
 
-Future<void> signOut() async {
+Future<void> signOutFireBase() async {
   return _firebaseAuth.signOut();
 }
 

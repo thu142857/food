@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:food/dashboard.dart';
@@ -7,6 +8,22 @@ import 'package:food/modules/auth/logic/helpers.dart';
 import 'package:food/modules/auth/logic/login.reducer.dart';
 import 'package:food/redux/IStore.dart';
 import 'package:food/redux/store.dart';
+
+import 'package:google_sign_in/google_sign_in.dart';
+  
+
+class ViewModel extends Equatable {
+  final String email;
+  final String password;
+
+  ViewModel({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
+}
 class LoginSignupPage extends StatefulWidget {
   //  LoginSignupPage({this.auth});
 
@@ -14,11 +31,12 @@ class LoginSignupPage extends StatefulWidget {
   // final VoidCallback loginCallback;
 
   @override
-  State<StatefulWidget> createState() => new _LoginSignupPageState();
+  LoginSignupPageState createState() => new LoginSignupPageState();
 
 }
 
-class _LoginSignupPageState extends State<LoginSignupPage>{
+class LoginSignupPageState extends State<LoginSignupPage>{
+  
   bool _isLoading ;
   bool _isLoginForm;
   
@@ -47,19 +65,26 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Flutter login demo'),
-        ),
-
-        body: Container(
-          child: StoreConnector<AppState,AppState>(
+    return Scaffold(
+        body: Center(
+          child: StoreConnector<AppState,ViewModel>(
+            onInit: (store){
+              store.dispatch(initialAuthData());
+            },
             distinct: true,
-            converter: (store) => store.state,
-            builder: (context,state){
-              final username = store.state.auth.username;
-              if (username != null) {
-               // Navigator.pop((context) => Dashboard());
+            converter: (store) {
+              return ViewModel(
+                
+                email: store.state.auth.username,
+                password: store.state.auth.password,
+              );
+            },
+            builder: (context,viewModel){
+              
+              if (viewModel.email != null && viewModel.email != "") {
+               return Container(
+                  child: Dashboard(),
+                );
               }
 
               return showForm();
@@ -244,7 +269,6 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 80.0,
-          
           child: Image.asset('assets/food.png'),
         ),
       ),
@@ -268,6 +292,35 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
       );
     }
   }
+  Widget showSignInWithGoogleButton() {
+    return OutlineButton(
+      splashColor: Colors.grey,
+      onPressed: () {},
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      highlightElevation: 0,
+      borderSide: BorderSide(color: Colors.grey),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(image: AssetImage('assets/google_logo.png'), height: 30.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'Sign in with Google',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
   Widget showForm() {
   return new Container(
       padding: EdgeInsets.all(16.0),
@@ -281,6 +334,7 @@ class _LoginSignupPageState extends State<LoginSignupPage>{
             showPasswordInput(),
             showPrimaryButton(),
             showSecondaryButton(),
+            showSignInWithGoogleButton(),
             showErrorMessage(),
           ],
         ),
