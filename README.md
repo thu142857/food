@@ -1,6 +1,7 @@
 # food
 
 A new Flutter project.
+![8a93b1c64775b82be164 - Minh Châu Nguyễn Thị-ANIMATION](https://user-images.githubusercontent.com/22870942/98341963-44416980-2042-11eb-975a-eadbc4749c5e.gif)
 
 ## Getting Started
 
